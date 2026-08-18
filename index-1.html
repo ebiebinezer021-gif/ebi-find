@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ZEBI FINDS — Gen-Z Approved Affiliate Finds</title>
+<meta name="description" content="Everyday products that look expensive, feel useful and fit the Gen-Z vibe. Curated beauty, fashion, tech and home finds under ₹999." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,450;0,9..144,600;1,9..144,480&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#15120F;
+    --ivory:#F7F1E7;
+    --beige:#DEC9AE;
+    --rose:#E9B8B4;
+    --rose-deep:#C68E8A;
+    --white:#FFFFFF;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:'Inter',sans-serif;background:var(--ivory);color:var(--ink);}
+  img{max-width:100%;display:block;}
+  a{color:inherit;}
+  button{font-family:inherit;}
+
+  /* ---------- Announcement bar ---------- */
+  .marquee{background:var(--ink);color:var(--ivory);overflow:hidden;white-space:nowrap;padding:9px 0;}
+  .marquee-track{display:inline-flex;animation:marquee 22s linear infinite;}
+  .marquee-track span{font-size:11.5px;font-weight:600;letter-spacing:0.12em;padding-right:40px;}
+  @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  @media (prefers-reduced-motion: reduce){.marquee-track{animation:none;}}
+
+  /* ---------- Nav ---------- */
+  header{position:sticky;top:0;z-index:40;background:rgba(247,241,231,0.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(21,18,15,0.08);}
+  .nav-inner{max-width:1180px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;}
+  .logo{font-family:'Fraunces',serif;font-weight:300;font-size:22px;letter-spacing:5px;background:none;border:none;cursor:pointer;color:var(--ink);}
+  .nav-links{display:none;gap:28px;align-items:center;}
+  .nav-links button{background:none;border:none;cursor:pointer;font-size:13px;font-weight:600;letter-spacing:0.05em;color:var(--ink);text-transform:uppercase;}
+  .nav-links button.active{color:var(--rose-deep);}
+  .nav-actions{display:flex;align-items:center;gap:8px;}
+  .icon-btn{width:36px;height:36px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:50%;position:relative;}
+  .icon-btn:hover{background:rgba(21,18,15,0.05);}
+  .search-wrap{display:flex;align-items:center;border-radius:999px;overflow:hidden;transition:all .25s ease;}
+  .search-wrap.open{background:#fff;border:1px solid rgba(21,18,15,0.15);}
+  .search-wrap input{border:none;outline:none;padding:9px 4px 9px 14px;width:140px;font-size:13px;background:transparent;display:none;font-family:'Inter',sans-serif;}
+  .search-wrap.open input{display:block;}
+  .badge-count{position:absolute;top:1px;right:1px;background:var(--rose-deep);color:#fff;font-size:9px;font-weight:700;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+  .hamburger{display:flex;}
+  @media (min-width:780px){.nav-links{display:flex;} .hamburger{display:none;}}
+
+  /* ---------- Mobile menu ---------- */
+  .mobile-menu{position:fixed;inset:0;background:var(--ink);z-index:60;color:var(--ivory);display:none;flex-direction:column;padding:24px;}
+  .mobile-menu.open{display:flex;}
+  .mobile-menu-top{display:flex;justify-content:space-between;align-items:center;}
+  .mobile-menu-top .logo{color:var(--ivory);}
+  .mobile-menu-top button{background:none;border:none;color:var(--ivory);cursor:pointer;}
+  .mobile-links{margin-top:48px;display:flex;flex-direction:column;gap:6px;}
+  .mobile-links button{background:none;border:none;text-align:left;color:var(--ivory);cursor:pointer;font-family:'Fraunces',serif;font-size:34px;font-weight:450;padding:10px 0;text-transform:capitalize;}
+  .mobile-foot{margin-top:auto;display:flex;gap:16px;font-size:12.5px;opacity:.7;}
+
+  /* ---------- Sections ---------- */
+  section{max-width:1180px;margin:0 auto;padding:56px 20px 10px;}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(21,18,15,0.12);border-radius:999px;padding:6px 14px;font-size:11px;font-weight:700;letter-spacing:0.1em;margin-bottom:22px;}
+
+  /* ---------- Hero ---------- */
+  .hero{padding-top:44px;}
+  .hero-grid{display:grid;grid-template-columns:1fr;gap:32px;align-items:center;}
+  .hero h1{font-family:'Fraunces',serif;font-weight:450;font-size:clamp(46px,9vw,84px);line-height:.98;margin:0;letter-spacing:-0.01em;}
+  .hero h1 em{font-style:italic;color:var(--rose-deep);}
+  .hero p{font-size:16.5px;color:rgba(21,18,15,.65);max-width:420px;margin-top:22px;line-height:1.55;}
+  .btn-primary{margin-top:30px;display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--ivory);border:none;border-radius:999px;padding:16px 28px;font-weight:700;font-size:14px;letter-spacing:0.03em;cursor:pointer;transition:background .25s;}
+  .btn-primary:hover{background:var(--rose-deep);}
+  .hero-images{position:relative;height:420px;}
+  .hero-img-1{position:absolute;top:0;right:8%;width:72%;height:78%;border-radius:26px;overflow:hidden;box-shadow:0 24px 50px rgba(21,18,15,.18);}
+  .hero-img-2{position:absolute;bottom:0;left:0;width:56%;height:52%;border-radius:22px;overflow:hidden;border:6px solid var(--ivory);box-shadow:0 18px 40px rgba(21,18,15,.2);}
+  .hero-img-1 img,.hero-img-2 img{width:100%;height:100%;object-fit:cover;}
+  .hero-tag{position:absolute;top:14px;left:0;background:var(--rose);border-radius:18px;padding:12px 16px;box-shadow:0 10px 26px rgba(21,18,15,.15);font-family:'Fraunces',serif;font-size:13px;font-weight:500;}
+  @media (min-width:780px){.hero-grid{grid-template-columns:1.05fr .95fr;}}
+
+  /* ---------- Section headers ---------- */
+  .sec-head{margin-bottom:22px;}
+  .sec-head h2{font-family:'Fraunces',serif;font-weight:500;font-size:34px;margin:0;}
+  .sec-head p{color:rgba(21,18,15,.6);margin-top:6px;font-size:14.5px;}
+
+  /* ---------- Pills ---------- */
+  .pills{display:flex;gap:10px;overflow-x:auto;padding-bottom:18px;scrollbar-width:none;}
+  .pills::-webkit-scrollbar{display:none;}
+  .pill{font-size:12.5px;font-weight:600;letter-spacing:0.04em;padding:9px 16px;border-radius:999px;border:1px solid rgba(21,18,15,.15);background:transparent;color:var(--ink);cursor:pointer;white-space:nowrap;transition:all .25s;flex-shrink:0;}
+  .pill.active{background:var(--ink);color:var(--ivory);border-color:var(--ink);}
+
+  /* ---------- Product grid ---------- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:16px;}
+  @media (min-width:780px){.grid{grid-template-columns:repeat(4,1fr);}}
+  .card{position:relative;border-radius:22px;background:#fff;border:1px solid rgba(21,18,15,.07);overflow:hidden;box-shadow:0 4px 14px rgba(21,18,15,.05);transition:all .35s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;}
+  .card:hover{box-shadow:0 18px 34px rgba(21,18,15,.13);transform:translateY(-4px);}
+  .card-notch{position:absolute;top:14px;left:14px;width:10px;height:10px;border-radius:50%;background:var(--ivory);border:1px solid rgba(21,18,15,.12);z-index:3;}
+  .card-discount{position:absolute;top:12px;right:12px;z-index:3;background:var(--ink);color:var(--ivory);font-size:11px;font-weight:700;letter-spacing:.03em;padding:5px 9px;border-radius:999px;}
+  .card-trending{position:absolute;top:12px;left:30px;z-index:3;background:rgba(247,241,231,.92);color:var(--ink);font-size:10px;font-weight:700;letter-spacing:.08em;padding:5px 9px;border-radius:999px;border:1px solid rgba(21,18,15,.1);}
+  .card-wish{position:absolute;top:150px;right:12px;z-index:3;width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 3px 10px rgba(21,18,15,.15);}
+  .card-img{width:100%;aspect-ratio:1/1;overflow:hidden;cursor:pointer;}
+  .card-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease;}
+  .card:hover .card-img img{transform:scale(1.045);}
+  .card-body{padding:16px 16px 18px;display:flex;flex-direction:column;gap:8px;flex:1;}
+  .card-top{display:flex;justify-content:space-between;align-items:center;}
+  .card-tag{font-size:10.5px;font-weight:700;letter-spacing:.09em;color:var(--rose-deep);text-transform:uppercase;}
+  .stars{display:inline-flex;align-items:center;gap:3px;font-size:12.5px;font-weight:600;}
+  .card h3{font-family:'Fraunces',serif;font-weight:500;font-size:17.5px;margin:0;cursor:pointer;line-height:1.25;}
+  .card .blurb{font-size:13px;color:rgba(21,18,15,.62);margin:0;line-height:1.45;}
+  .price-row{display:flex;align-items:baseline;gap:8px;margin-top:2px;}
+  .price{font-family:'Fraunces',serif;font-weight:600;font-size:19px;}
+  .price-original{font-size:13px;color:rgba(21,18,15,.4);text-decoration:line-through;}
+  .shop-btn{margin-top:8px;display:inline-flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:12px 0;border-radius:999px;background:var(--ink);color:var(--ivory);font-weight:700;font-size:13px;letter-spacing:.04em;text-decoration:none;transition:background .25s;border:none;cursor:pointer;}
+  .shop-btn:hover{background:var(--rose-deep);}
+
+  /* ---------- Category tiles ---------- */
+  .cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (min-width:780px){.cat-grid{grid-template-columns:repeat(4,1fr);}}
+  .cat-card{text-align:left;border:1px solid rgba(21,18,15,.08);background:#fff;border-radius:20px;padding:22px;cursor:pointer;transition:transform .25s,box-shadow .25s;}
+  .cat-card:hover{transform:translateY(-3px);box-shadow:0 16px 30px rgba(21,18,15,.1);}
+  .cat-emoji{font-size:26px;}
+  .cat-label{font-weight:800;font-size:13.5px;letter-spacing:.06em;margin-top:10px;}
+  .cat-sub{font-size:13px;color:rgba(21,18,15,.55);margin-top:3px;}
+
+  /* ---------- Banner ---------- */
+  .banner{position:relative;border-radius:28px;overflow:hidden;background:var(--ink);padding:56px 28px;text-align:center;}
+  .banner::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 20%, rgba(233,184,180,.22), transparent 55%), radial-gradient(circle at 85% 80%, rgba(222,201,174,.18), transparent 55%);}
+  .banner-content{position:relative;}
+  .banner h2{font-family:'Fraunces',serif;font-weight:450;font-size:clamp(30px,6vw,48px);color:var(--ivory);margin:0;line-height:1.08;}
+  .banner h2 em{font-style:italic;color:var(--rose);}
+  .banner p{color:rgba(247,241,231,.7);margin-top:16px;font-size:15px;}
+  .btn-light{margin-top:26px;background:var(--ivory);color:var(--ink);border:none;border-radius:999px;padding:14px 26px;font-weight:700;font-size:13.5px;letter-spacing:.04em;cursor:pointer;}
+
+  /* ---------- Footer ---------- */
+  footer{background:var(--ink);color:var(--ivory);margin-top:80px;}
+  .footer-inner{max-width:1180px;margin:0 auto;padding:56px 20px 30px;}
+  .footer-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:30px;}
+  .footer-logo{font-family:'Fraunces',serif;font-weight:300;font-size:24px;letter-spacing:5px;}
+  .footer-tag{font-size:13.5px;color:rgba(247,241,231,.6);margin-top:10px;line-height:1.6;max-width:320px;}
+  .footer-links{display:flex;gap:50px;flex-wrap:wrap;}
+  .footer-col-title{font-size:11.5px;font-weight:700;letter-spacing:.08em;color:rgba(247,241,231,.5);margin-bottom:12px;}
+  .footer-col a{display:block;font-size:13.5px;margin-bottom:9px;text-decoration:none;}
+  .footer-bottom{margin-top:40px;padding-top:22px;border-top:1px solid rgba(247,241,231,.12);font-size:12px;color:rgba(247,241,231,.45);line-height:1.6;}
+
+  /* ---------- Product detail ---------- */
+  .detail-wrap{max-width:1000px;margin:0 auto;padding:28px 20px 60px;display:none;}
+  .detail-wrap.open{display:block;}
+  .back-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-weight:600;font-size:13px;color:var(--ink);margin-bottom:22px;}
+  .detail-grid{display:grid;grid-template-columns:1fr;gap:32px;}
+  @media (min-width:780px){.detail-grid{grid-template-columns:1.05fr .95fr;}}
+  .detail-img{position:relative;border-radius:26px;overflow:hidden;aspect-ratio:1/1;}
+  .detail-img img{width:100%;height:100%;object-fit:cover;}
+  .detail-tag{font-size:11px;font-weight:700;letter-spacing:.09em;color:var(--rose-deep);text-transform:uppercase;}
+  .detail-title{font-family:'Fraunces',serif;font-weight:500;font-size:38px;margin:8px 0 6px;line-height:1.05;}
+  .detail-price{font-family:'Fraunces',serif;font-weight:600;font-size:32px;}
+  .detail-desc{font-size:15px;line-height:1.65;color:rgba(21,18,15,.72);}
+  .feat-title{font-weight:700;font-size:13px;letter-spacing:.04em;margin-bottom:10px;}
+  .feat-list{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:7px;}
+  .feat-list li{font-size:14px;color:rgba(21,18,15,.75);}
+  .detail-actions{display:flex;gap:10px;margin-top:24px;}
+  .round-btn{width:52px;height:52px;border-radius:50%;border:1px solid rgba(21,18,15,.15);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .disclosure{margin-top:18px;font-size:11.5px;color:rgba(21,18,15,.45);line-height:1.5;}
+
+  #home-view.hidden, .card, .detail-wrap{transition:none;}
+  #home-view.hidden{display:none;}
+
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--ivory);padding:10px 20px;border-radius:999px;font-size:13px;font-weight:600;z-index:100;display:none;}
+  .toast.show{display:block;}
+</style>
+</head>
+<body>
+
+<div class="marquee"><div class="marquee-track">
+  <span>FREE PICKS &bull; GEN-Z APPROVED &bull; AFFILIATE FINDS &bull; FREE PICKS &bull; GEN-Z APPROVED &bull; AFFILIATE FINDS &bull;</span>
+  <span>FREE PICKS &bull; GEN-Z APPROVED &bull; AFFILIATE FINDS &bull; FREE PICKS &bull; GEN-Z APPROVED &bull; AFFILIATE FINDS &bull;</span>
+</div></div>
+
+<header>
+  <div class="nav-inner">
+    <button class="logo" onclick="goHome()">ZEBI FINDS</button>
+    <nav class="nav-links" id="nav-links">
+      <button data-cat="beauty" onclick="goCategory('beauty')">Beauty</button>
+      <button data-cat="fashion" onclick="goCategory('fashion')">Fashion</button>
+      <button data-cat="tech" onclick="goCategory('tech')">Tech</button>
+      <button data-cat="home" onclick="goCategory('home')">Home</button>
+    </nav>
+    <div class="nav-actions">
+      <div class="search-wrap" id="search-wrap">
+        <input id="search-input" placeholder="Search finds..." oninput="onSearch(this.value)"/>
+        <button class="icon-btn" onclick="toggleSearch()" aria-label="Search">
+          <svg id="search-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+      </div>
+      <button class="icon-btn" onclick="scrollToTrending()" aria-label="Wishlist">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+        <span class="badge-count" id="wish-count" style="display:none;">0</span>
+      </button>
+      <button class="icon-btn hamburger" onclick="toggleMobileMenu(true)" aria-label="Menu">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-menu-top">
+    <span class="logo">ZEBI FINDS</span>
+    <button onclick="toggleMobileMenu(false)" aria-label="Close">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-links">
+    <button onclick="goCategory('beauty');toggleMobileMenu(false)">Beauty</button>
+    <button onclick="goCategory('fashion');toggleMobileMenu(false)">Fashion</button>
+    <button onclick="goCategory('tech');toggleMobileMenu(false)">Tech</button>
+    <button onclick="goCategory('home');toggleMobileMenu(false)">Home</button>
+  </div>
+  <div class="mobile-foot"><span>Instagram</span><span>About</span><span>Contact</span></div>
+</div>
+
+<div id="home-view">
+  <section class="hero">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">✦ CURATED • TRENDY • WORTH IT</div>
+        <h1>Find it.<br><em>Love it.</em><br>Link it.</h1>
+        <p>Everyday products that look expensive, feel useful and fit the Gen-Z vibe.</p>
+        <button class="btn-primary" onclick="scrollToTrending()">SHOP TRENDING FINDS →</button>
+      </div>
+      <div class="hero-images">
+        <div class="hero-img-1"><img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=900&q=80" alt="Editorial beauty and fashion flatlay" onerror="this.parentElement.style.background='linear-gradient(135deg,#DEC9AE,#E9B8B4)'; this.remove();"/></div>
+        <div class="hero-img-2"><img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80" alt="Aesthetic lifestyle product" onerror="this.parentElement.style.background='linear-gradient(135deg,#DEC9AE,#E9B8B4)'; this.remove();"/></div>
+        <div class="hero-tag">under ₹999 ✦</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="trending-section">
+    <div class="sec-head">
+      <h2>Trending Finds</h2>
+      <p>The products everyone is saving right now.</p>
+    </div>
+    <div class="pills" id="pills"></div>
+    <div class="grid" id="trending-grid"></div>
+  </section>
+
+  <section>
+    <div class="sec-head" style="margin-bottom:20px;"><h2 style="font-size:30px;">Shop by category</h2></div>
+    <div class="cat-grid">
+      <button class="cat-card" onclick="goCategory('beauty')"><div class="cat-emoji">💄</div><div class="cat-label">BEAUTY</div><div class="cat-sub">Glow-up essentials</div></button>
+      <button class="cat-card" onclick="goCategory('fashion')"><div class="cat-emoji">👗</div><div class="cat-label">FASHION</div><div class="cat-sub">Easy everyday style</div></button>
+      <button class="cat-card" onclick="goCategory('tech')"><div class="cat-emoji">📱</div><div class="cat-label">TECH</div><div class="cat-sub">Useful + aesthetic</div></button>
+      <button class="cat-card" onclick="goCategory('home')"><div class="cat-emoji">🏠</div><div class="cat-label">HOME</div><div class="cat-sub">Make your space hit different</div></button>
+    </div>
+  </section>
+
+  <section>
+    <div class="banner">
+      <div class="banner-content">
+        <h2>Looks expensive.<br><em>Doesn't have to be.</em></h2>
+        <p>Curated finds under ₹999 for your next little upgrade.</p>
+        <button class="btn-light" onclick="clearFiltersAndScroll()">EXPLORE FINDS</button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head" style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;">
+      <h2 style="font-size:28px;">Under ₹499</h2><span style="font-size:13.5px;color:rgba(21,18,15,.55);">Small price, big upgrade.</span>
+    </div>
+    <div class="grid" id="under499-grid"></div>
+  </section>
+
+  <section>
+    <div class="sec-head" style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;">
+      <h2 style="font-size:28px;">Under ₹999</h2><span style="font-size:13.5px;color:rgba(21,18,15,.55);">The sweet spot for a treat-yourself moment.</span>
+    </div>
+    <div class="grid" id="under999-grid"></div>
+  </section>
+</div>
+
+<div class="detail-wrap" id="detail-view"></div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">ZEBI FINDS</div>
+        <p class="footer-tag">Gen-Z finds that actually hit different.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <div class="footer-col-title">COMPANY</div>
+          <a href="#">About</a><a href="#">Contact</a><a href="#">Categories</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">LEGAL</div>
+          <a href="#">Privacy Policy</a><a href="#">Affiliate Disclosure</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">SOCIAL</div>
+          <a href="#">Instagram</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">As an Amazon Associate, I earn from qualifying purchases. ZEBI FINDS is an independent product discovery site and is not affiliated with or endorsed by Amazon.</div>
+  </div>
+</footer>
+
+<div class="toast" id="toast">Link copied ✓</div>
+
+<script>
+const AFFILIATE_BASE = "https://www.amazon.in/dp/";
+function affiliateUrl(id){ return AFFILIATE_BASE + id + "?tag=zebifinds-21&linkCode=ll1&ref=zebifinds_site"; }
+
+const PRODUCTS = [
+  {id:"p1",name:"Everyday Nude Lipstick",category:"beauty",tag:"Beauty",price:349,original:599,rating:4.6,reviews:812,image:"https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=900&q=80",blurb:"A your-lips-but-better nude that goes with every fit.",description:"A creamy, buildable nude lipstick made for the no-makeup makeup look. Lightweight formula, soft-matte finish, zero cakiness — the one shade everyone keeps in their bag.",features:["Soft-matte, non-drying formula","Buildable from sheer to full coverage","Universally flattering nude-rose tone","Travel-friendly slim bullet"],affiliateId:"B0EXAMPLE001"},
+  {id:"p2",name:"Glow Beauty Essential",category:"beauty",tag:"Beauty",price:599,original:999,rating:4.7,reviews:1240,image:"https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=900&q=80",blurb:"The 2-minute step that makes skin look lit from within.",description:"A lightweight glow serum that layers under or over makeup. Formulated to hydrate, even out tone, and give that expensive-skin finish without the nine-step routine.",features:["Fast-absorbing, non-sticky texture","Adds instant radiance","Works under or over makeup","Fragrance-light, all skin types"],affiliateId:"B0EXAMPLE002"},
+  {id:"p3",name:"Minimal Wireless Earbuds",category:"tech",tag:"Tech",price:1499,original:2499,rating:4.5,reviews:2033,image:"https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=900&q=80",blurb:"Studio-clean sound in a case that actually looks good.",description:"Compact true-wireless earbuds with a minimal matte case, punchy sound and a battery that outlasts your longest study session or commute playlist.",features:["Up to 24hr total playtime with case","Touch controls, low-latency mode","IPX4 sweat & splash resistant","USB-C fast charge"],affiliateId:"B0EXAMPLE003"},
+  {id:"p4",name:"Aesthetic Room Find",category:"home",tag:"Home",price:449,original:799,rating:4.4,reviews:567,image:"https://images.unsplash.com/photo-1615529328331-f8917597711f?auto=format&fit=crop&w=900&q=80",blurb:"The warm-light desk fixture your room reel is missing.",description:"A soft-glow ambient light that instantly upgrades a desk, shelf, or bedside corner. The kind of small object that makes an entire room feel curated.",features:["Warm, adjustable ambient glow","USB-C powered, no bulky adapter","Fits desks, shelves & nightstands","Minimal ceramic-finish base"],affiliateId:"B0EXAMPLE004"},
+  {id:"p5",name:"Minimal Watch",category:"fashion",tag:"Fashion",price:899,original:1499,rating:4.6,reviews:934,image:"https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=900&q=80",blurb:"A clean dial that reads expensive from across the room.",description:"An ultra-thin minimal watch with a clean dial and adjustable strap — built to layer under jacket cuffs or wear solo with zero effort.",features:["Slim, lightweight case","Scratch-resistant glass face","Adjustable strap, unisex fit","Water-resistant for daily wear"],affiliateId:"B0EXAMPLE005"},
+  {id:"p6",name:"Phone Accessory",category:"tech",tag:"Tech",price:399,original:699,rating:4.5,reviews:1420,image:"https://images.unsplash.com/photo-1592286927505-1def25115481?auto=format&fit=crop&w=900&q=80",blurb:"The magnetic card-and-stand combo your phone's been missing.",description:"A slim magnetic wallet-and-stand that snaps onto the back of your phone. Holds two cards, folds into a stand for hands-free scrolling.",features:["Strong magnetic snap-fit","Holds up to 2 cards securely","Folds flat into a phone stand","Vegan leather finish"],affiliateId:"B0EXAMPLE006"},
+  {id:"p7",name:"Trending Perfume",category:"beauty",tag:"Beauty",price:799,original:1199,rating:4.7,reviews:1655,image:"https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=80",blurb:"The one people stop you in the hallway to ask about.",description:"A warm, musky-sweet mini fragrance that lasts from morning class to late-night plans. Small enough to live in your bag, strong enough to be memorable.",features:["Long-lasting, 8hr+ wear","Travel-size, bag-friendly bottle","Warm musk & soft vanilla base","Unisex, everyday wearable scent"],affiliateId:"B0EXAMPLE007"},
+  {id:"p8",name:"Everyday Sneakers",category:"fashion",tag:"Fashion",price:1899,original:2999,rating:4.4,reviews:720,image:"https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=900&q=80",blurb:"Clean-white sneakers that go with genuinely everything.",description:"A low-profile clean sneaker in a versatile colorway — built to be the one shoe you reach for on repeat, from campus to weekend plans.",features:["Breathable knit-mesh upper","Cushioned everyday-wear sole","Lightweight, true to size","Easy to keep clean"],affiliateId:"B0EXAMPLE008"}
+];
+
+let wishlist = new Set();
+let category = "all";
+let query = "";
+
+function starIcon(){ return '<svg width="13" height="13" viewBox="0 0 24 24" fill="#AD8A63" stroke="none"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>'; }
+function heartIcon(filled){ return '<svg width="16" height="16" viewBox="0 0 24 24" fill="'+(filled?'#C68E8A':'none')+'" stroke="'+(filled?'#C68E8A':'#15120F')+'" stroke-width="1.8"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>'; }
+
+function cardHTML(p){
+  const discount = Math.round((p.original - p.price) / p.original * 100);
+  const wished = wishlist.has(p.id);
+  return `
+    <div class="card">
+      <div class="card-notch"></div>
+      ${discount>0 ? `<div class="card-discount">-${discount}%</div>` : ""}
+      <div class="card-trending">TRENDING</div>
+      <button class="card-wish" onclick="toggleWishlist('${p.id}')">${heartIcon(wished)}</button>
+      <div class="card-img" onclick="openProduct('${p.id}')"><img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.parentElement.style.background='linear-gradient(135deg,#DEC9AE,#E9B8B4)'; this.remove();"/></div>
+      <div class="card-body">
+        <div class="card-top"><span class="card-tag">${p.tag}</span><span class="stars">${starIcon()} ${p.rating}</span></div>
+        <h3 onclick="openProduct('${p.id}')">${p.name}</h3>
+        <p class="blurb">${p.blurb}</p>
+        <div class="price-row"><span class="price">₹${p.price}</span><span class="price-original">₹${p.original}</span></div>
+        <a class="shop-btn" href="${affiliateUrl(p.affiliateId)}" target="_blank" rel="noopener noreferrer sponsored" onclick="event.stopPropagation()">SHOP NOW →</a>
+      </div>
+    </div>`;
+}
+
+function renderPills(){
+  const cats = [["all","All"],["beauty","Beauty"],["fashion","Fashion"],["tech","Tech"],["home","Home"]];
+  document.getElementById("pills").innerHTML = cats.map(([id,label]) =>
+    `<button class="pill ${category===id?'active':''}" onclick="setCategory('${id}')">${label}</button>`
+  ).join("");
+}
+
+function renderTrending(){
+  const filtered = PRODUCTS.filter(p=>{
+    const matchCat = category==="all" || p.category===category;
+    const q = query.toLowerCase();
+    const matchQuery = q==="" || p.name.toLowerCase().includes(q) || p.blurb.toLowerCase().includes(q) || p.tag.toLowerCase().includes(q);
+    return matchCat && matchQuery;
+  });
+  const grid = document.getElementById("trending-grid");
+  grid.innerHTML = filtered.length ? filtered.map(cardHTML).join("") : `<p style="grid-column:1/-1;color:rgba(21,18,15,.55);">No finds match "${query}" yet — try another search.</p>`;
+}
+
+function renderPriceSections(){
+  document.getElementById("under499-grid").innerHTML = PRODUCTS.filter(p=>p.price<499).map(cardHTML).join("");
+  document.getElementById("under999-grid").innerHTML = PRODUCTS.filter(p=>p.price<999).map(cardHTML).join("");
+}
+
+function updateNavActive(){
+  document.querySelectorAll("#nav-links button").forEach(b=>{
+    b.classList.toggle("active", b.dataset.cat===category);
+  });
+}
+
+function updateWishCount(){
+  const el = document.getElementById("wish-count");
+  if(wishlist.size>0){ el.style.display="flex"; el.textContent=wishlist.size; }
+  else{ el.style.display="none"; }
+}
+
+function toggleWishlist(id){
+  wishlist.has(id) ? wishlist.delete(id) : wishlist.add(id);
+  updateWishCount();
+  renderTrending(); renderPriceSections();
+  if(document.getElementById("detail-view").classList.contains("open")) renderDetail(currentProductId);
+}
+
+function setCategory(id){ category = id; renderPills(); renderTrending(); updateNavActive(); }
+function goCategory(id){ showHome(); setCategory(id); setTimeout(()=>document.getElementById("trending-section").scrollIntoView({behavior:"smooth"}),60); }
+function goHome(){ showHome(); category="all"; query=""; document.getElementById("search-input").value=""; renderPills(); renderTrending(); updateNavActive(); window.scrollTo({top:0,behavior:"instant"}); }
+function clearFiltersAndScroll(){ category="all"; renderPills(); renderTrending(); updateNavActive(); document.getElementById("trending-section").scrollIntoView({behavior:"smooth"}); }
+function scrollToTrending(){ showHome(); document.getElementById("trending-section").scrollIntoView({behavior:"smooth"}); }
+function onSearch(v){ query=v; renderTrending(); }
+function toggleSearch(){
+  const wrap = document.getElementById("search-wrap");
+  wrap.classList.toggle("open");
+  if(wrap.classList.contains("open")){ document.getElementById("search-input").focus(); showHome(); }
+  else { document.getElementById("search-input").value=""; query=""; renderTrending(); }
+}
+function toggleMobileMenu(open){ document.getElementById("mobile-menu").classList.toggle("open", open); }
+
+let currentProductId = null;
+function openProduct(id){
+  currentProductId = id;
+  renderDetail(id);
+  document.getElementById("home-view").classList.add("hidden");
+  document.getElementById("detail-view").classList.add("open");
+  window.scrollTo({top:0,behavior:"instant"});
+}
+function showHome(){
+  document.getElementById("home-view").classList.remove("hidden");
+  document.getElementById("detail-view").classList.remove("open");
+}
+
+function shareProduct(id){
+  const p = PRODUCTS.find(x=>x.id===id);
+  const url = window.location.href;
+  const text = p.name + " — found this on ZEBI FINDS";
+  if(navigator.share){ navigator.share({title:p.name, text, url}).catch(()=>{}); }
+  else if(navigator.clipboard){ navigator.clipboard.writeText(url); showToast(); }
+  else { showToast(); }
+}
+function showToast(){
+  const t = document.getElementById("toast");
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 1800);
+}
+
+function renderDetail(id){
+  const p = PRODUCTS.find(x=>x.id===id);
+  const discount = Math.round((p.original - p.price) / p.original * 100);
+  const wished = wishlist.has(p.id);
+  document.getElementById("detail-view").innerHTML = `
+    <button class="back-btn" onclick="goHome()">← Back to finds</button>
+    <div class="detail-grid">
+      <div class="detail-img">
+        <img src="${p.image}" alt="${p.name}" onerror="this.parentElement.style.background='linear-gradient(135deg,#DEC9AE,#E9B8B4)'; this.remove();"/>
+        ${discount>0?`<div class="card-discount" style="top:16px;left:16px;right:auto;">-${discount}% OFF</div>`:""}
+      </div>
+      <div>
+        <span class="detail-tag">${p.tag}</span>
+        <h1 class="detail-title">${p.name}</h1>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+          <span class="stars">${starIcon()} ${p.rating}</span>
+          <span style="font-size:12.5px;color:rgba(21,18,15,.5);">${p.reviews.toLocaleString()} reviews</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:20px;">
+          <span class="detail-price">₹${p.price}</span>
+          <span style="font-size:16px;color:rgba(21,18,15,.4);text-decoration:line-through;">₹${p.original}</span>
+        </div>
+        <p class="detail-desc">${p.description}</p>
+        <div style="margin:22px 0;">
+          <div class="feat-title">KEY FEATURES</div>
+          <ul class="feat-list">${p.features.map(f=>`<li>${f}</li>`).join("")}</ul>
+        </div>
+        <div class="detail-actions">
+          <a class="shop-btn" style="flex:1;padding:16px 20px;font-size:14px;" href="${affiliateUrl(p.affiliateId)}" target="_blank" rel="noopener noreferrer sponsored">🛍 SHOP ON AMAZON →</a>
+          <button class="round-btn" onclick="toggleWishlist('${p.id}')">${heartIcon(wished)}</button>
+          <button class="round-btn" onclick="shareProduct('${p.id}')">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#15120F" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/></svg>
+          </button>
+        </div>
+        <p class="disclosure">As an Amazon Associate, I earn from qualifying purchases. This helps support ZEBI FINDS at no extra cost to you.</p>
+      </div>
+    </div>`;
+}
+
+// init
+renderPills();
+renderTrending();
+renderPriceSections();
+updateNavActive();
+</script>
+</body>
+</html>

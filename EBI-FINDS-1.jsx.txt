@@ -1,0 +1,1526 @@
+import React, { useState, useMemo, useRef, useEffect } from "react";
+import {
+  Search,
+  Menu,
+  X,
+  Heart,
+  Star,
+  ArrowRight,
+  ArrowLeft,
+  Share2,
+  ShoppingBag,
+  Instagram,
+  Sparkles,
+} from "lucide-react";
+
+/* ---------------------------------------------------------------
+   EBI FINDS — Gen-Z affiliate shopping, editorial-luxury direction
+   Palette: matte black / warm ivory / nude beige / soft rose
+   Display: Fraunces (editorial serif, italic accents)
+   Body/UI: Inter
+   Signature: die-cut "price tag" notch on every product card +
+   a rotating ticker announcement bar
+----------------------------------------------------------------*/
+
+const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,450;0,9..144,600;1,9..144,450;1,9..144,500&family=Inter:wght@400;500;600;700;800&display=swap');`;
+
+const COLORS = {
+  ink: "#15120F",
+  ivory: "#F7F1E7",
+  beige: "#DEC9AE",
+  rose: "#E9B8B4",
+  roseDeep: "#C68E8A",
+  gold: "#AD8A63",
+};
+
+const AFFILIATE_BASE = "https://www.amazon.in/dp/";
+
+const PRODUCTS = [
+  {
+    id: "p1",
+    name: "Everyday Nude Lipstick",
+    category: "beauty",
+    tag: "Beauty",
+    price: 349,
+    original: 599,
+    rating: 4.6,
+    reviews: 812,
+    trending: true,
+    image:
+      "https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=900&q=80",
+    blurb: "A your-lips-but-better nude that goes with every fit.",
+    description:
+      "A creamy, buildable nude lipstick made for the no-makeup makeup look. Lightweight formula, soft-matte finish, zero cakiness — the one shade everyone keeps in their bag.",
+    features: [
+      "Soft-matte, non-drying formula",
+      "Buildable from sheer to full coverage",
+      "Universally flattering nude-rose tone",
+      "Travel-friendly slim bullet",
+    ],
+    affiliateId: "B0EXAMPLE001",
+  },
+  {
+    id: "p2",
+    name: "Glow Beauty Essential",
+    category: "beauty",
+    tag: "Beauty",
+    price: 599,
+    original: 999,
+    rating: 4.7,
+    reviews: 1240,
+    trending: true,
+    image:
+      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=900&q=80",
+    blurb: "The 2-minute step that makes skin look lit from within.",
+    description:
+      "A lightweight glow serum that layers under or over makeup. Formulated to hydrate, even out tone, and give that expensive-skin finish without the nine-step routine.",
+    features: [
+      "Fast-absorbing, non-sticky texture",
+      "Adds instant radiance",
+      "Works under or over makeup",
+      "Fragrance-light, all skin types",
+    ],
+    affiliateId: "B0EXAMPLE002",
+  },
+  {
+    id: "p3",
+    name: "Minimal Wireless Earbuds",
+    category: "tech",
+    tag: "Tech",
+    price: 1499,
+    original: 2499,
+    rating: 4.5,
+    reviews: 2033,
+    trending: true,
+    image:
+      "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=900&q=80",
+    blurb: "Studio-clean sound in a case that actually looks good.",
+    description:
+      "Compact true-wireless earbuds with a minimal matte case, punchy sound and a battery that outlasts your longest study session or commute playlist.",
+    features: [
+      "Up to 24hr total playtime with case",
+      "Touch controls, low-latency mode",
+      "IPX4 sweat & splash resistant",
+      "USB-C fast charge",
+    ],
+    affiliateId: "B0EXAMPLE003",
+  },
+  {
+    id: "p4",
+    name: "Aesthetic Room Find",
+    category: "home",
+    tag: "Home",
+    price: 449,
+    original: 799,
+    rating: 4.4,
+    reviews: 567,
+    trending: true,
+    image:
+      "https://images.unsplash.com/photo-1615529328331-f8917597711f?auto=format&fit=crop&w=900&q=80",
+    blurb: "The warm-light desk fixture your room reel is missing.",
+    description:
+      "A soft-glow ambient light that instantly upgrades a desk, shelf, or bedside corner. The kind of small object that makes an entire room feel curated.",
+    features: [
+      "Warm, adjustable ambient glow",
+      "USB-C powered, no bulky adapter",
+      "Fits desks, shelves & nightstands",
+      "Minimal ceramic-finish base",
+    ],
+    affiliateId: "B0EXAMPLE004",
+  },
+  {
+    id: "p5",
+    name: "Minimal Watch",
+    category: "fashion",
+    tag: "Fashion",
+    price: 899,
+    original: 1499,
+    rating: 4.6,
+    reviews: 934,
+    trending: true,
+    image:
+      "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=900&q=80",
+    blurb: "A clean dial that reads expensive from across the room.",
+    description:
+      "An ultra-thin minimal watch with a clean dial and adjustable strap — built to layer under jacket cuffs or wear solo with zero effort.",
+    features: [
+      "Slim, lightweight case",
+      "Scratch-resistant glass face",
+      "Adjustable strap, unisex fit",
+      "Water-resistant for daily wear",
+    ],
+    affiliateId: "B0EXAMPLE005",
+  },
+  {
+    id: "p6",
+    name: "Phone Accessory",
+    category: "tech",
+    tag: "Tech",
+    price: 399,
+    original: 699,
+    rating: 4.5,
+    reviews: 1420,
+    trending: true,
+    image:
+      "https://images.unsplash.com/photo-1592286927505-1def25115481?auto=format&fit=crop&w=900&q=80",
+    blurb: "The magnetic card-and-stand combo your phone's been missing.",
+    description:
+      "A slim magnetic wallet-and-stand that snaps onto the back of your phone. Holds two cards, folds into a stand for hands-free scrolling.",
+    features: [
+      "Strong magnetic snap-fit",
+      "Holds up to 2 cards securely",
+      "Folds flat into a phone stand",
+      "Vegan leather finish",
+    ],
+    affiliateId: "B0EXAMPLE006",
+  },
+  {
+    id: "p7",
+    name: "Trending Perfume",
+    category: "beauty",
+    tag: "Beauty",
+    price: 799,
+    original: 1199,
+    rating: 4.7,
+    reviews: 1655,
+    trending: true,
+    image:
+      "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=80",
+    blurb: "The one people stop you in the hallway to ask about.",
+    description:
+      "A warm, musky-sweet mini fragrance that lasts from morning class to late-night plans. Small enough to live in your bag, strong enough to be memorable.",
+    features: [
+      "Long-lasting, 8hr+ wear",
+      "Travel-size, bag-friendly bottle",
+      "Warm musk & soft vanilla base",
+      "Unisex, everyday wearable scent",
+    ],
+    affiliateId: "B0EXAMPLE007",
+  },
+  {
+    id: "p8",
+    name: "Everyday Sneakers",
+    category: "fashion",
+    tag: "Fashion",
+    price: 1899,
+    original: 2999,
+    rating: 4.4,
+    reviews: 720,
+    trending: true,
+    image:
+      "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=900&q=80",
+    blurb: "Clean-white sneakers that go with genuinely everything.",
+    description:
+      "A low-profile clean sneaker in a versatile colorway — built to be the one shoe you reach for on repeat, from campus to weekend plans.",
+    features: [
+      "Breathable knit-mesh upper",
+      "Cushioned everyday-wear sole",
+      "Lightweight, true to size",
+      "Easy to keep clean",
+    ],
+    affiliateId: "B0EXAMPLE008",
+  },
+];
+
+const CATEGORIES = [
+  { id: "beauty", emoji: "💄", label: "BEAUTY", sub: "Glow-up essentials" },
+  { id: "fashion", emoji: "👗", label: "FASHION", sub: "Easy everyday style" },
+  { id: "tech", emoji: "📱", label: "TECH", sub: "Useful + aesthetic" },
+  { id: "home", emoji: "🏠", label: "HOME", sub: "Make your space hit different" },
+];
+
+function affiliateUrl(id) {
+  return `${AFFILIATE_BASE}${id}?tag=ebifinds-21&linkCode=ll1&ref=ebifinds_site`;
+}
+
+function ImgFallback({ src, alt, className }) {
+  const [broken, setBroken] = useState(false);
+  if (broken) {
+    return (
+      <div
+        className={className}
+        style={{
+          background: `linear-gradient(135deg, ${COLORS.beige}, ${COLORS.rose})`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Sparkles size={28} color={COLORS.ink} strokeWidth={1.3} />
+      </div>
+    );
+  }
+  return (
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      onError={() => setBroken(true)}
+      className={className}
+    />
+  );
+}
+
+function Stars({ rating }) {
+  return (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 3 }}>
+      <Star size={13} fill={COLORS.gold} color={COLORS.gold} strokeWidth={0} />
+      <span style={{ fontSize: 12.5, fontWeight: 600, color: COLORS.ink }}>
+        {rating}
+      </span>
+    </span>
+  );
+}
+
+function Pill({ children, active, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        fontFamily: "Inter, sans-serif",
+        fontSize: 12.5,
+        fontWeight: 600,
+        letterSpacing: "0.04em",
+        padding: "9px 16px",
+        borderRadius: 999,
+        border: `1px solid ${active ? COLORS.ink : "rgba(21,18,15,0.15)"}`,
+        background: active ? COLORS.ink : "transparent",
+        color: active ? COLORS.ivory : COLORS.ink,
+        cursor: "pointer",
+        whiteSpace: "nowrap",
+        transition: "all 0.25s ease",
+        flexShrink: 0,
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+function ProductCard({ product, wishlist, toggleWishlist, onOpen }) {
+  const [hover, setHover] = useState(false);
+  const discount = Math.round(
+    ((product.original - product.price) / product.original) * 100
+  );
+  const wished = wishlist.has(product.id);
+
+  return (
+    <div
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        position: "relative",
+        borderRadius: 22,
+        background: "#FFFFFF",
+        border: `1px solid rgba(21,18,15,0.07)`,
+        overflow: "hidden",
+        boxShadow: hover
+          ? "0 18px 34px rgba(21,18,15,0.13)"
+          : "0 4px 14px rgba(21,18,15,0.05)",
+        transform: hover ? "translateY(-4px)" : "translateY(0)",
+        transition: "all 0.35s cubic-bezier(.2,.8,.2,1)",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      {/* die-cut tag notch — signature detail */}
+      <div
+        style={{
+          position: "absolute",
+          top: 14,
+          left: 14,
+          width: 10,
+          height: 10,
+          borderRadius: "50%",
+          background: COLORS.ivory,
+          border: "1px solid rgba(21,18,15,0.12)",
+          zIndex: 3,
+        }}
+      />
+      {discount > 0 && (
+        <div
+          style={{
+            position: "absolute",
+            top: 12,
+            right: 12,
+            zIndex: 3,
+            background: COLORS.ink,
+            color: COLORS.ivory,
+            fontFamily: "Inter, sans-serif",
+            fontSize: 11,
+            fontWeight: 700,
+            letterSpacing: "0.03em",
+            padding: "5px 9px",
+            borderRadius: 999,
+          }}
+        >
+          -{discount}%
+        </div>
+      )}
+      {product.trending && (
+        <div
+          style={{
+            position: "absolute",
+            top: 12,
+            left: 30,
+            zIndex: 3,
+            background: "rgba(247,241,231,0.92)",
+            color: COLORS.ink,
+            fontFamily: "Inter, sans-serif",
+            fontSize: 10,
+            fontWeight: 700,
+            letterSpacing: "0.08em",
+            padding: "5px 9px",
+            borderRadius: 999,
+            border: "1px solid rgba(21,18,15,0.1)",
+          }}
+        >
+          TRENDING
+        </div>
+      )}
+      <button
+        onClick={() => toggleWishlist(product.id)}
+        aria-label="Toggle wishlist"
+        style={{
+          position: "absolute",
+          bottom: 168,
+          right: 12,
+          zIndex: 3,
+          width: 34,
+          height: 34,
+          borderRadius: "50%",
+          border: "none",
+          background: "rgba(255,255,255,0.92)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+          boxShadow: "0 3px 10px rgba(21,18,15,0.15)",
+        }}
+      >
+        <Heart
+          size={16}
+          color={wished ? COLORS.roseDeep : COLORS.ink}
+          fill={wished ? COLORS.roseDeep : "none"}
+          strokeWidth={1.8}
+        />
+      </button>
+
+      <div
+        onClick={() => onOpen(product)}
+        style={{ cursor: "pointer", width: "100%", aspectRatio: "1/1", overflow: "hidden" }}
+      >
+        <ImgFallback
+          src={product.image}
+          alt={product.name}
+          className="ebi-card-img"
+        />
+      </div>
+
+      <div style={{ padding: "16px 16px 18px", display: "flex", flexDirection: "column", gap: 8, flex: 1 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: 10.5,
+              fontWeight: 700,
+              letterSpacing: "0.09em",
+              color: COLORS.roseDeep,
+              textTransform: "uppercase",
+            }}
+          >
+            {product.tag}
+          </span>
+          <Stars rating={product.rating} />
+        </div>
+
+        <h3
+          onClick={() => onOpen(product)}
+          style={{
+            fontFamily: "'Fraunces', serif",
+            fontWeight: 500,
+            fontSize: 17.5,
+            color: COLORS.ink,
+            margin: 0,
+            cursor: "pointer",
+            lineHeight: 1.25,
+          }}
+        >
+          {product.name}
+        </h3>
+        <p
+          style={{
+            fontFamily: "Inter, sans-serif",
+            fontSize: 13,
+            color: "rgba(21,18,15,0.62)",
+            margin: 0,
+            lineHeight: 1.45,
+          }}
+        >
+          {product.blurb}
+        </p>
+
+        <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginTop: 2 }}>
+          <span style={{ fontFamily: "'Fraunces', serif", fontWeight: 600, fontSize: 19, color: COLORS.ink }}>
+            ₹{product.price}
+          </span>
+          <span
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: 13,
+              color: "rgba(21,18,15,0.4)",
+              textDecoration: "line-through",
+            }}
+          >
+            ₹{product.original}
+          </span>
+        </div>
+
+        <a
+          href={affiliateUrl(product.affiliateId)}
+          target="_blank"
+          rel="noopener noreferrer sponsored"
+          onClick={(e) => e.stopPropagation()}
+          style={{
+            marginTop: 8,
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 6,
+            width: "100%",
+            padding: "12px 0",
+            borderRadius: 999,
+            background: COLORS.ink,
+            color: COLORS.ivory,
+            fontFamily: "Inter, sans-serif",
+            fontWeight: 700,
+            fontSize: 13,
+            letterSpacing: "0.04em",
+            textDecoration: "none",
+            transition: "background 0.25s ease",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.background = COLORS.roseDeep)}
+          onMouseLeave={(e) => (e.currentTarget.style.background = COLORS.ink)}
+        >
+          SHOP NOW <ArrowRight size={14} />
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function Grid({ products, wishlist, toggleWishlist, onOpen }) {
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(155px, 1fr))",
+        gap: 16,
+      }}
+      className="ebi-grid"
+    >
+      {products.map((p) => (
+        <ProductCard
+          key={p.id}
+          product={p}
+          wishlist={wishlist}
+          toggleWishlist={toggleWishlist}
+          onOpen={onOpen}
+        />
+      ))}
+    </div>
+  );
+}
+
+export default function App() {
+  const [view, setView] = useState("home");
+  const [activeProduct, setActiveProduct] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState("all");
+  const [wishlist, setWishlist] = useState(new Set());
+  const [toast, setToast] = useState("");
+  const trendingRef = useRef(null);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [view]);
+
+  function toggleWishlist(id) {
+    setWishlist((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }
+
+  function openProduct(p) {
+    setActiveProduct(p);
+    setView("product");
+  }
+
+  function goHomeCategory(catId) {
+    setView("home");
+    setCategory(catId);
+    setTimeout(() => {
+      trendingRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 60);
+  }
+
+  function share(product) {
+    const url = typeof window !== "undefined" ? window.location.href : "https://ebifinds.com";
+    const text = `${product.name} — found this on EBI FINDS`;
+    if (navigator.share) {
+      navigator.share({ title: product.name, text, url }).catch(() => {});
+    } else {
+      setToast("Link copied ✓");
+      setTimeout(() => setToast(""), 1800);
+    }
+  }
+
+  const filtered = useMemo(() => {
+    return PRODUCTS.filter((p) => {
+      const matchCat = category === "all" || p.category === category;
+      const matchQuery =
+        query.trim() === "" ||
+        p.name.toLowerCase().includes(query.toLowerCase()) ||
+        p.blurb.toLowerCase().includes(query.toLowerCase()) ||
+        p.tag.toLowerCase().includes(query.toLowerCase());
+      return matchCat && matchQuery;
+    });
+  }, [category, query]);
+
+  const under499 = PRODUCTS.filter((p) => p.price < 499);
+  const under999 = PRODUCTS.filter((p) => p.price < 999);
+
+  return (
+    <div
+      style={{
+        fontFamily: "Inter, sans-serif",
+        background: COLORS.ivory,
+        minHeight: "100vh",
+        color: COLORS.ink,
+      }}
+    >
+      <style>{`
+        ${FONT_IMPORT}
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { margin: 0; }
+        ::selection { background: ${COLORS.rose}; color: ${COLORS.ink}; }
+        .ebi-card-img { width: 100%; height: 100%; object-fit: cover; display:block; transition: transform 0.6s ease; }
+        div:hover > .ebi-card-img { transform: scale(1.045); }
+        .ebi-scrollbar-none::-webkit-scrollbar { display: none; }
+        .ebi-marquee-track { display: inline-flex; animation: ebi-marquee 22s linear infinite; }
+        @keyframes ebi-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        @media (prefers-reduced-motion: reduce) {
+          .ebi-marquee-track { animation: none; }
+        }
+        @media (min-width: 780px) {
+          .ebi-grid { grid-template-columns: repeat(4, 1fr) !important; }
+          .ebi-hero-grid { grid-template-columns: 1.05fr 0.95fr !important; }
+          .ebi-cat-grid { grid-template-columns: repeat(4, 1fr) !important; }
+          .ebi-nav-links { display: flex !important; }
+          .ebi-hamburger { display: none !important; }
+        }
+        a, button { -webkit-tap-highlight-color: transparent; }
+        button:focus-visible, a:focus-visible, input:focus-visible {
+          outline: 2px solid ${COLORS.roseDeep};
+          outline-offset: 2px;
+        }
+      `}</style>
+
+      {/* Announcement bar — marquee ticker */}
+      <div
+        style={{
+          background: COLORS.ink,
+          color: COLORS.ivory,
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+          padding: "9px 0",
+        }}
+      >
+        <div className="ebi-marquee-track">
+          {[0, 1].map((i) => (
+            <span
+              key={i}
+              style={{
+                fontFamily: "Inter, sans-serif",
+                fontSize: 11.5,
+                fontWeight: 600,
+                letterSpacing: "0.12em",
+                paddingRight: 40,
+              }}
+            >
+              FREE PICKS &nbsp;•&nbsp; GEN-Z APPROVED &nbsp;•&nbsp; AFFILIATE FINDS &nbsp;•&nbsp; FREE PICKS
+              &nbsp;•&nbsp; GEN-Z APPROVED &nbsp;•&nbsp; AFFILIATE FINDS &nbsp;•&nbsp;
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Navbar */}
+      <header
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 40,
+          background: "rgba(247,241,231,0.86)",
+          backdropFilter: "blur(14px)",
+          borderBottom: "1px solid rgba(21,18,15,0.08)",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: 1180,
+            margin: "0 auto",
+            padding: "14px 20px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 14,
+          }}
+        >
+          <button
+            onClick={() => {
+              setView("home");
+              setCategory("all");
+              setQuery("");
+            }}
+            style={{
+              fontFamily: "'Fraunces', serif",
+              fontWeight: 600,
+              fontSize: 21,
+              letterSpacing: "0.01em",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: COLORS.ink,
+            }}
+          >
+            EBI FINDS
+          </button>
+
+          <nav className="ebi-nav-links" style={{ display: "none", gap: 28, alignItems: "center" }}>
+            {["beauty", "fashion", "tech", "home"].map((c) => (
+              <button
+                key={c}
+                onClick={() => goHomeCategory(c)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  letterSpacing: "0.05em",
+                  color: category === c && view === "home" ? COLORS.roseDeep : COLORS.ink,
+                  textTransform: "uppercase",
+                }}
+              >
+                {c}
+              </button>
+            ))}
+          </nav>
+
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                background: searchOpen ? "#fff" : "transparent",
+                border: `1px solid ${searchOpen ? "rgba(21,18,15,0.15)" : "transparent"}`,
+                borderRadius: 999,
+                overflow: "hidden",
+                transition: "all 0.25s ease",
+              }}
+            >
+              {searchOpen && (
+                <input
+                  autoFocus
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search finds..."
+                  style={{
+                    border: "none",
+                    outline: "none",
+                    padding: "9px 4px 9px 14px",
+                    width: 140,
+                    fontFamily: "Inter, sans-serif",
+                    fontSize: 13,
+                    background: "transparent",
+                  }}
+                />
+              )}
+              <button
+                aria-label="Search"
+                onClick={() => {
+                  if (searchOpen && query) setQuery("");
+                  setSearchOpen((s) => !s);
+                  setView("home");
+                }}
+                style={{
+                  width: 36,
+                  height: 36,
+                  border: "none",
+                  background: "none",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {searchOpen ? <X size={17} /> : <Search size={17} />}
+              </button>
+            </div>
+
+            <button
+              aria-label="Wishlist"
+              onClick={() => {
+                setView("home");
+                setTimeout(() => trendingRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+              }}
+              style={{
+                position: "relative",
+                width: 36,
+                height: 36,
+                border: "none",
+                background: "none",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Heart size={17} color={COLORS.ink} />
+              {wishlist.size > 0 && (
+                <span
+                  style={{
+                    position: "absolute",
+                    top: 1,
+                    right: 1,
+                    background: COLORS.roseDeep,
+                    color: "#fff",
+                    fontSize: 9,
+                    fontWeight: 700,
+                    width: 15,
+                    height: 15,
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {wishlist.size}
+                </span>
+              )}
+            </button>
+
+            <button
+              className="ebi-hamburger"
+              aria-label="Menu"
+              onClick={() => setMenuOpen(true)}
+              style={{
+                width: 36,
+                height: 36,
+                border: "none",
+                background: "none",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Menu size={19} />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile menu overlay */}
+      {menuOpen && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: COLORS.ink,
+            zIndex: 60,
+            color: COLORS.ivory,
+            display: "flex",
+            flexDirection: "column",
+            padding: 24,
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <span style={{ fontFamily: "'Fraunces', serif", fontSize: 20, fontWeight: 600 }}>EBI FINDS</span>
+            <button
+              onClick={() => setMenuOpen(false)}
+              style={{ background: "none", border: "none", color: COLORS.ivory, cursor: "pointer" }}
+            >
+              <X size={24} />
+            </button>
+          </div>
+          <div style={{ marginTop: 48, display: "flex", flexDirection: "column", gap: 6 }}>
+            {["beauty", "fashion", "tech", "home"].map((c) => (
+              <button
+                key={c}
+                onClick={() => {
+                  setMenuOpen(false);
+                  goHomeCategory(c);
+                }}
+                style={{
+                  background: "none",
+                  border: "none",
+                  textAlign: "left",
+                  color: COLORS.ivory,
+                  cursor: "pointer",
+                  fontFamily: "'Fraunces', serif",
+                  fontSize: 34,
+                  fontWeight: 450,
+                  padding: "10px 0",
+                  textTransform: "capitalize",
+                }}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+          <div style={{ marginTop: "auto", display: "flex", gap: 16, fontSize: 12.5, opacity: 0.7 }}>
+            <span>Instagram</span>
+            <span>About</span>
+            <span>Contact</span>
+          </div>
+        </div>
+      )}
+
+      {toast && (
+        <div
+          style={{
+            position: "fixed",
+            bottom: 24,
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: COLORS.ink,
+            color: COLORS.ivory,
+            padding: "10px 20px",
+            borderRadius: 999,
+            fontSize: 13,
+            fontWeight: 600,
+            zIndex: 100,
+          }}
+        >
+          {toast}
+        </div>
+      )}
+
+      {view === "home" && (
+        <>
+          {/* HERO */}
+          <section style={{ maxWidth: 1180, margin: "0 auto", padding: "44px 20px 20px" }}>
+            <div
+              className="ebi-hero-grid"
+              style={{ display: "grid", gridTemplateColumns: "1fr", gap: 32, alignItems: "center" }}
+            >
+              <div>
+                <div
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 8,
+                    background: "#fff",
+                    border: "1px solid rgba(21,18,15,0.12)",
+                    borderRadius: 999,
+                    padding: "6px 14px",
+                    fontSize: 11,
+                    fontWeight: 700,
+                    letterSpacing: "0.1em",
+                    marginBottom: 22,
+                  }}
+                >
+                  <Sparkles size={12} color={COLORS.roseDeep} /> CURATED • TRENDY • WORTH IT
+                </div>
+                <h1
+                  style={{
+                    fontFamily: "'Fraunces', serif",
+                    fontWeight: 450,
+                    fontSize: "clamp(46px, 9vw, 84px)",
+                    lineHeight: 0.98,
+                    margin: 0,
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  Find it.
+                  <br />
+                  <span style={{ fontStyle: "italic", color: COLORS.roseDeep }}>Love it.</span>
+                  <br />
+                  Link it.
+                </h1>
+                <p
+                  style={{
+                    fontFamily: "Inter, sans-serif",
+                    fontSize: 16.5,
+                    color: "rgba(21,18,15,0.65)",
+                    maxWidth: 420,
+                    marginTop: 22,
+                    lineHeight: 1.55,
+                  }}
+                >
+                  Everyday products that look expensive, feel useful and fit the Gen-Z vibe.
+                </p>
+                <button
+                  onClick={() => trendingRef.current?.scrollIntoView({ behavior: "smooth" })}
+                  style={{
+                    marginTop: 30,
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 10,
+                    background: COLORS.ink,
+                    color: COLORS.ivory,
+                    border: "none",
+                    borderRadius: 999,
+                    padding: "16px 28px",
+                    fontFamily: "Inter, sans-serif",
+                    fontWeight: 700,
+                    fontSize: 14,
+                    letterSpacing: "0.03em",
+                    cursor: "pointer",
+                  }}
+                >
+                  SHOP TRENDING FINDS <ArrowRight size={16} />
+                </button>
+              </div>
+
+              <div style={{ position: "relative", height: 420 }}>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    right: "8%",
+                    width: "72%",
+                    height: "78%",
+                    borderRadius: 26,
+                    overflow: "hidden",
+                    boxShadow: "0 24px 50px rgba(21,18,15,0.18)",
+                  }}
+                >
+                  <ImgFallback
+                    src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=900&q=80"
+                    alt="Editorial beauty and fashion flatlay"
+                    className="ebi-card-img"
+                  />
+                </div>
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    width: "56%",
+                    height: "52%",
+                    borderRadius: 22,
+                    overflow: "hidden",
+                    border: `6px solid ${COLORS.ivory}`,
+                    boxShadow: "0 18px 40px rgba(21,18,15,0.2)",
+                  }}
+                >
+                  <ImgFallback
+                    src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80"
+                    alt="Aesthetic lifestyle product"
+                    className="ebi-card-img"
+                  />
+                </div>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 14,
+                    left: 0,
+                    background: COLORS.rose,
+                    borderRadius: 18,
+                    padding: "12px 16px",
+                    boxShadow: "0 10px 26px rgba(21,18,15,0.15)",
+                  }}
+                >
+                  <span style={{ fontFamily: "'Fraunces', serif", fontSize: 13, fontWeight: 500 }}>
+                    under ₹999 ✦
+                  </span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* TRENDING */}
+          <section ref={trendingRef} style={{ maxWidth: 1180, margin: "0 auto", padding: "56px 20px 10px" }}>
+            <div style={{ marginBottom: 22 }}>
+              <h2 style={{ fontFamily: "'Fraunces', serif", fontWeight: 500, fontSize: 34, margin: 0 }}>
+                Trending Finds
+              </h2>
+              <p style={{ fontFamily: "Inter, sans-serif", color: "rgba(21,18,15,0.6)", marginTop: 6, fontSize: 14.5 }}>
+                The products everyone is saving right now.
+              </p>
+            </div>
+
+            <div
+              className="ebi-scrollbar-none"
+              style={{ display: "flex", gap: 10, overflowX: "auto", paddingBottom: 18 }}
+            >
+              <Pill active={category === "all"} onClick={() => setCategory("all")}>
+                All
+              </Pill>
+              <Pill active={category === "beauty"} onClick={() => setCategory("beauty")}>
+                Beauty
+              </Pill>
+              <Pill active={category === "fashion"} onClick={() => setCategory("fashion")}>
+                Fashion
+              </Pill>
+              <Pill active={category === "tech"} onClick={() => setCategory("tech")}>
+                Tech
+              </Pill>
+              <Pill active={category === "home"} onClick={() => setCategory("home")}>
+                Home
+              </Pill>
+            </div>
+
+            {filtered.length === 0 ? (
+              <p style={{ fontFamily: "Inter, sans-serif", color: "rgba(21,18,15,0.55)", padding: "30px 0" }}>
+                No finds match "{query}" yet — try another search.
+              </p>
+            ) : (
+              <Grid products={filtered} wishlist={wishlist} toggleWishlist={toggleWishlist} onOpen={openProduct} />
+            )}
+          </section>
+
+          {/* CATEGORIES */}
+          <section style={{ maxWidth: 1180, margin: "0 auto", padding: "70px 20px 10px" }}>
+            <h2 style={{ fontFamily: "'Fraunces', serif", fontWeight: 500, fontSize: 30, margin: "0 0 20px" }}>
+              Shop by category
+            </h2>
+            <div className="ebi-cat-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+              {CATEGORIES.map((c) => (
+                <button
+                  key={c.id}
+                  onClick={() => goHomeCategory(c.id)}
+                  style={{
+                    textAlign: "left",
+                    border: "1px solid rgba(21,18,15,0.08)",
+                    background: "#fff",
+                    borderRadius: 20,
+                    padding: 22,
+                    cursor: "pointer",
+                    transition: "transform 0.25s ease, box-shadow 0.25s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-3px)";
+                    e.currentTarget.style.boxShadow = "0 16px 30px rgba(21,18,15,0.1)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow = "none";
+                  }}
+                >
+                  <div style={{ fontSize: 26 }}>{c.emoji}</div>
+                  <div style={{ fontFamily: "Inter, sans-serif", fontWeight: 800, fontSize: 13.5, letterSpacing: "0.06em", marginTop: 10 }}>
+                    {c.label}
+                  </div>
+                  <div style={{ fontFamily: "Inter, sans-serif", fontSize: 13, color: "rgba(21,18,15,0.55)", marginTop: 3 }}>
+                    {c.sub}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </section>
+
+          {/* FEATURED BANNER */}
+          <section style={{ maxWidth: 1180, margin: "0 auto", padding: "70px 20px 10px" }}>
+            <div
+              style={{
+                position: "relative",
+                borderRadius: 28,
+                overflow: "hidden",
+                background: COLORS.ink,
+                padding: "56px 28px",
+                textAlign: "center",
+              }}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: `radial-gradient(circle at 20% 20%, rgba(233,184,180,0.22), transparent 55%), radial-gradient(circle at 85% 80%, rgba(222,201,174,0.18), transparent 55%)`,
+                }}
+              />
+              <div style={{ position: "relative" }}>
+                <h2
+                  style={{
+                    fontFamily: "'Fraunces', serif",
+                    fontWeight: 450,
+                    fontSize: "clamp(30px, 6vw, 48px)",
+                    color: COLORS.ivory,
+                    margin: 0,
+                    lineHeight: 1.08,
+                  }}
+                >
+                  Looks expensive.
+                  <br />
+                  <span style={{ fontStyle: "italic", color: COLORS.rose }}>Doesn't have to be.</span>
+                </h2>
+                <p style={{ fontFamily: "Inter, sans-serif", color: "rgba(247,241,231,0.7)", marginTop: 16, fontSize: 15 }}>
+                  Curated finds under ₹999 for your next little upgrade.
+                </p>
+                <button
+                  onClick={() => {
+                    setCategory("all");
+                    trendingRef.current?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  style={{
+                    marginTop: 26,
+                    background: COLORS.ivory,
+                    color: COLORS.ink,
+                    border: "none",
+                    borderRadius: 999,
+                    padding: "14px 26px",
+                    fontFamily: "Inter, sans-serif",
+                    fontWeight: 700,
+                    fontSize: 13.5,
+                    letterSpacing: "0.04em",
+                    cursor: "pointer",
+                  }}
+                >
+                  EXPLORE FINDS
+                </button>
+              </div>
+            </div>
+          </section>
+
+          {/* UNDER 499 */}
+          <PriceSection
+            title="Under ₹499"
+            subtitle="Small price, big upgrade."
+            products={under499}
+            wishlist={wishlist}
+            toggleWishlist={toggleWishlist}
+            onOpen={openProduct}
+          />
+
+          {/* UNDER 999 */}
+          <PriceSection
+            title="Under ₹999"
+            subtitle="The sweet spot for a treat-yourself moment."
+            products={under999}
+            wishlist={wishlist}
+            toggleWishlist={toggleWishlist}
+            onOpen={openProduct}
+          />
+
+          <Footer />
+        </>
+      )}
+
+      {view === "product" && activeProduct && (
+        <ProductDetail
+          product={activeProduct}
+          wishlist={wishlist}
+          toggleWishlist={toggleWishlist}
+          onBack={() => setView("home")}
+          onShare={share}
+        />
+      )}
+
+      {view === "product" && <Footer />}
+    </div>
+  );
+}
+
+function PriceSection({ title, subtitle, products, wishlist, toggleWishlist, onOpen }) {
+  if (products.length === 0) return null;
+  return (
+    <section style={{ maxWidth: 1180, margin: "0 auto", padding: "64px 20px 10px" }}>
+      <div style={{ marginBottom: 20, display: "flex", alignItems: "baseline", gap: 12, flexWrap: "wrap" }}>
+        <h2 style={{ fontFamily: "'Fraunces', serif", fontWeight: 500, fontSize: 28, margin: 0 }}>{title}</h2>
+        <span style={{ fontFamily: "Inter, sans-serif", fontSize: 13.5, color: "rgba(21,18,15,0.55)" }}>
+          {subtitle}
+        </span>
+      </div>
+      <Grid products={products} wishlist={wishlist} toggleWishlist={toggleWishlist} onOpen={onOpen} />
+    </section>
+  );
+}
+
+function ProductDetail({ product, wishlist, toggleWishlist, onBack, onShare }) {
+  const wished = wishlist.has(product.id);
+  const discount = Math.round(((product.original - product.price) / product.original) * 100);
+
+  return (
+    <div style={{ maxWidth: 1000, margin: "0 auto", padding: "28px 20px 60px" }}>
+      <button
+        onClick={onBack}
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 6,
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          fontFamily: "Inter, sans-serif",
+          fontWeight: 600,
+          fontSize: 13,
+          color: COLORS.ink,
+          marginBottom: 22,
+        }}
+      >
+        <ArrowLeft size={15} /> Back to finds
+      </button>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr",
+          gap: 32,
+        }}
+        className="ebi-hero-grid"
+      >
+        <div style={{ position: "relative", borderRadius: 26, overflow: "hidden", aspectRatio: "1/1" }}>
+          <ImgFallback src={product.image} alt={product.name} className="ebi-card-img" />
+          {discount > 0 && (
+            <div
+              style={{
+                position: "absolute",
+                top: 16,
+                left: 16,
+                background: COLORS.ink,
+                color: COLORS.ivory,
+                fontFamily: "Inter, sans-serif",
+                fontWeight: 700,
+                fontSize: 12,
+                padding: "6px 12px",
+                borderRadius: 999,
+              }}
+            >
+              -{discount}% OFF
+            </div>
+          )}
+        </div>
+
+        <div>
+          <span
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: 11,
+              fontWeight: 700,
+              letterSpacing: "0.09em",
+              color: COLORS.roseDeep,
+              textTransform: "uppercase",
+            }}
+          >
+            {product.tag}
+          </span>
+          <h1
+            style={{
+              fontFamily: "'Fraunces', serif",
+              fontWeight: 500,
+              fontSize: 38,
+              margin: "8px 0 6px",
+              lineHeight: 1.05,
+            }}
+          >
+            {product.name}
+          </h1>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+            <Stars rating={product.rating} />
+            <span style={{ fontFamily: "Inter, sans-serif", fontSize: 12.5, color: "rgba(21,18,15,0.5)" }}>
+              {product.reviews.toLocaleString()} reviews
+            </span>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 20 }}>
+            <span style={{ fontFamily: "'Fraunces', serif", fontWeight: 600, fontSize: 32 }}>
+              ₹{product.price}
+            </span>
+            <span
+              style={{
+                fontFamily: "Inter, sans-serif",
+                fontSize: 16,
+                color: "rgba(21,18,15,0.4)",
+                textDecoration: "line-through",
+              }}
+            >
+              ₹{product.original}
+            </span>
+          </div>
+
+          <p
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: 15,
+              lineHeight: 1.65,
+              color: "rgba(21,18,15,0.72)",
+            }}
+          >
+            {product.description}
+          </p>
+
+          <div style={{ margin: "22px 0" }}>
+            <h3 style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.04em", marginBottom: 10 }}>
+              KEY FEATURES
+            </h3>
+            <ul style={{ margin: 0, paddingLeft: 18, display: "flex", flexDirection: "column", gap: 7 }}>
+              {product.features.map((f, i) => (
+                <li key={i} style={{ fontFamily: "Inter, sans-serif", fontSize: 14, color: "rgba(21,18,15,0.75)" }}>
+                  {f}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div style={{ display: "flex", gap: 10, marginTop: 24 }}>
+            <a
+              href={affiliateUrl(product.affiliateId)}
+              target="_blank"
+              rel="noopener noreferrer sponsored"
+              style={{
+                flex: 1,
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8,
+                background: COLORS.ink,
+                color: COLORS.ivory,
+                borderRadius: 999,
+                padding: "16px 20px",
+                fontFamily: "Inter, sans-serif",
+                fontWeight: 700,
+                fontSize: 14,
+                letterSpacing: "0.03em",
+                textDecoration: "none",
+              }}
+            >
+              <ShoppingBag size={16} /> SHOP ON AMAZON <ArrowRight size={15} />
+            </a>
+            <button
+              onClick={() => toggleWishlist(product.id)}
+              aria-label="Toggle wishlist"
+              style={{
+                width: 52,
+                height: 52,
+                borderRadius: "50%",
+                border: "1px solid rgba(21,18,15,0.15)",
+                background: "#fff",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Heart size={18} color={wished ? COLORS.roseDeep : COLORS.ink} fill={wished ? COLORS.roseDeep : "none"} />
+            </button>
+            <button
+              onClick={() => onShare(product)}
+              aria-label="Share"
+              style={{
+                width: 52,
+                height: 52,
+                borderRadius: "50%",
+                border: "1px solid rgba(21,18,15,0.15)",
+                background: "#fff",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Share2 size={17} color={COLORS.ink} />
+            </button>
+          </div>
+
+          <p
+            style={{
+              marginTop: 18,
+              fontFamily: "Inter, sans-serif",
+              fontSize: 11.5,
+              color: "rgba(21,18,15,0.45)",
+              lineHeight: 1.5,
+            }}
+          >
+            As an Amazon Associate, I earn from qualifying purchases. This helps support EBI FINDS at no
+            extra cost to you.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Footer() {
+  return (
+    <footer style={{ background: COLORS.ink, color: COLORS.ivory, marginTop: 80 }}>
+      <div style={{ maxWidth: 1180, margin: "0 auto", padding: "56px 20px 30px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+            gap: 30,
+          }}
+        >
+          <div style={{ maxWidth: 320 }}>
+            <div style={{ fontFamily: "'Fraunces', serif", fontSize: 24, fontWeight: 600 }}>EBI FINDS</div>
+            <p style={{ fontFamily: "Inter, sans-serif", fontSize: 13.5, color: "rgba(247,241,231,0.6)", marginTop: 10, lineHeight: 1.6 }}>
+              Gen-Z finds that actually hit different.
+            </p>
+            <div style={{ display: "flex", gap: 12, marginTop: 18 }}>
+              <div
+                style={{
+                  width: 34,
+                  height: 34,
+                  borderRadius: "50%",
+                  border: "1px solid rgba(247,241,231,0.25)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Instagram size={15} />
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: "flex", gap: 50, flexWrap: "wrap" }}>
+            <div>
+              <div style={{ fontFamily: "Inter, sans-serif", fontSize: 11.5, fontWeight: 700, letterSpacing: "0.08em", color: "rgba(247,241,231,0.5)", marginBottom: 12 }}>
+                COMPANY
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 9, fontFamily: "Inter, sans-serif", fontSize: 13.5 }}>
+                <span>About</span>
+                <span>Contact</span>
+                <span>Categories</span>
+              </div>
+            </div>
+            <div>
+              <div style={{ fontFamily: "Inter, sans-serif", fontSize: 11.5, fontWeight: 700, letterSpacing: "0.08em", color: "rgba(247,241,231,0.5)", marginBottom: 12 }}>
+                LEGAL
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 9, fontFamily: "Inter, sans-serif", fontSize: 13.5 }}>
+                <span>Privacy Policy</span>
+                <span>Affiliate Disclosure</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          style={{
+            marginTop: 40,
+            paddingTop: 22,
+            borderTop: "1px solid rgba(247,241,231,0.12)",
+            fontFamily: "Inter, sans-serif",
+            fontSize: 12,
+            color: "rgba(247,241,231,0.45)",
+            lineHeight: 1.6,
+          }}
+        >
+          As an Amazon Associate, I earn from qualifying purchases. EBI FINDS is an independent product
+          discovery site and is not affiliated with or endorsed by Amazon.
+        </div>
+      </div>
+    </footer>
+  );
+}
